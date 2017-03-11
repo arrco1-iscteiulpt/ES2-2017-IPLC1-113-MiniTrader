@@ -6,6 +6,8 @@ import java.util.List;
 import mt.Order;
 import mt.comm.ClientComm;
 
+
+//Hello World
 /**
  * Reponsible for keep the data used during an user Session.
  */

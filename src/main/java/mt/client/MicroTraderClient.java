@@ -2,7 +2,6 @@ package mt.client;
 
 import mt.comm.ClientComm;
 
-//teste commit
 
 
 /**
