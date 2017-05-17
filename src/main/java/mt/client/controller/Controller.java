@@ -77,22 +77,26 @@ public class Controller {
 	 *            The MicroTrader order to send.
 	 */
 	public void sendOrder(Order order) throws Exception {
-		if (Session.clientComm.isConnected()){
-			if(order.isBuyOrder()){
-			Session.clientComm.sendOrder(order);
-			}
-			if(order.isSellOrder() && Session.history.size() < 5){
-				Session.clientComm.sendOrder(order);
-				}
-			if(order.isSellOrder() && Session.history.size() == 5){
-			throw new Exception("You can't have more than 5 buy unfilled orders");
-			}
-		}
+
 			
-		else 
-			throw new Exception("You're not connected to any server.");
+			if (Session.clientComm.isConnected()){
+			MaxNumberSellOrders(order);
+
+			}
+			else 
+				throw new Exception("You're not connected to any server.");
+			}
+			
 		
-	}
+		public void MaxNumberSellOrders(Order order) throws Exception{
+			if(order.isBuyOrder())
+					Session.clientComm.sendOrder(order);	
+			if(order.isSellOrder() && Session.history.size() < 5)
+				Session.clientComm.sendOrder(order);
+			if(order.isSellOrder() && Session.history.size() == 5)
+				throw new Exception("You can't have more than 5 buy unfilled orders");
+			
+		}
 
 	public void sendBatchOrders() throws Exception {
 		if (Session.clientComm.isConnected()) {
