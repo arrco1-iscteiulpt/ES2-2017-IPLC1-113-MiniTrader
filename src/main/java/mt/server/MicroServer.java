@@ -220,16 +220,15 @@ public class MicroServer implements MicroTraderServer {
 		LOGGER.log(Level.INFO, "Processing new order...");
 
 		Order o = msg.getOrder();
-		
+		System.out.println(Session.orders.size());
 		try {
-			if(sameSellerOrBuyeOrder(o)==true ){
+			if(sameSellerOrBuyeOrder(o)){
 				throw new Exception("Clients are not allowed to issue sell orders for their own buy orders and vice versa ");
 			}	
-			if(unitsMorethan10(o)==true ){
+			if(unitsMoreThan10(o)){
 				throw new Exception("You can't buy/sell less than 10 units!");
 			}
 	
-			else{
 				// save the order on map
 				saveOrder(o);
 				// if is buy order
@@ -250,7 +249,7 @@ public class MicroServer implements MicroTraderServer {
 
 				// reset the set of changed orders
 				updatedOrders = new HashSet<>();
-			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -259,14 +258,13 @@ public class MicroServer implements MicroTraderServer {
 	}
 	
 	/**
-	 * Store the order on map
-	 * 
-	 * @param o
-	 * 			the order to be stored on map
+	 *  Os clientes não estão autorizados a
+	 *   emitir ordens de venda para as 
+	 *   suas próprias ordens de compra e vice-versa. 
 	 */
 	private boolean sameSellerOrBuyeOrder(Order order) throws Exception{
-		
-		if((order.isSellOrder() || order.isBuyOrder() ) && Session.history.contains(order))
+		System.out.println(Session.orders.size()+"1");
+		if((order.isSellOrder() || order.isBuyOrder() ) && Session.orders.contains(order))
 			return true;
 		else 
 			return false;
@@ -277,7 +275,7 @@ public class MicroServer implements MicroTraderServer {
 	 * (compra ou ordem de venda) nunca 
 	 * pode ser inferior a 10 unidades 
 	 */
-	private boolean unitsMorethan10(Order order) throws Exception{
+	private boolean unitsMoreThan10(Order order) throws Exception{
 		if(order.getNumberOfUnits() < 10 )
 			return true;
 		else 
