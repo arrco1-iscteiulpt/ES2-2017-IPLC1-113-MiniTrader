@@ -80,24 +80,13 @@ public class Controller {
 
 			
 			if (Session.clientComm.isConnected()){
-			MaxNumberSellOrders(order);
+			Session.clientComm.sendOrder(order);
 
 			}
 			else 
 				throw new Exception("You're not connected to any server.");
 			}
 			
-		
-		public void MaxNumberSellOrders(Order order) throws Exception{
-			if(order.isBuyOrder())
-					Session.clientComm.sendOrder(order);	
-			if(order.isSellOrder() && Session.history.size() < 5)
-				Session.clientComm.sendOrder(order);
-			if(order.isSellOrder() && Session.history.size() == 5)
-				throw new Exception("You can't have more than 5 buy unfilled orders");
-			
-		}
-
 	public void sendBatchOrders() throws Exception {
 		if (Session.clientComm.isConnected()) {
 			for (int i = 1; i < 10; i++) {
