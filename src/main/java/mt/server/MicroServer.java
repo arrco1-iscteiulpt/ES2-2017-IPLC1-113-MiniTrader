@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import mt.Order;
+import mt.client.Session;
 import mt.comm.ServerComm;
 import mt.comm.ServerSideMessage;
 import mt.comm.impl.ServerCommImpl;
@@ -220,35 +221,67 @@ public class MicroServer implements MicroTraderServer {
 
 		Order o = msg.getOrder();
 		
-		// save the order on map
-		saveOrder(o);
+		try {
+			if(sameSellerOrBuyeOrder(o)==true ){
+				throw new Exception("Clients are not allowed to issue sell orders for their own buy orders and vice versa ");
+			}	
+			if(unitsMorethan10(o)==true ){
+				throw new Exception("You can't buy/sell less than 10 units!");
+			}
+	
+			else{
+				// save the order on map
+				saveOrder(o);
+				// if is buy order
+				if (o.isBuyOrder()) {
+					processBuy(msg.getOrder());
+				}
+			
+				// if is sell order
+				if (o.isSellOrder()) {
+					processSell(msg.getOrder());
+				}
 
-		
-		// BR3 - A single order quantity (buy or sell order)
-		//can never be lower than 10 units 
-		if(o.getNumberOfUnits() < 10){
-			throw new ServerException("You can't buy/sell less than 10 units!");
+				// notify clients of changed order
+				notifyClientsOfChangedOrders();
+
+				// remove all fulfilled orders
+				removeFulfilledOrders();
+
+				// reset the set of changed orders
+				updatedOrders = new HashSet<>();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+	}
+	
+	/**
+	 * Store the order on map
+	 * 
+	 * @param o
+	 * 			the order to be stored on map
+	 */
+	private boolean sameSellerOrBuyeOrder(Order order) throws Exception{
 		
-		// if is buy order
-		if (o.isBuyOrder()) {
-			processBuy(msg.getOrder());
-		}
-		
-		// if is sell order
-		if (o.isSellOrder()) {
-			processSell(msg.getOrder());
-		}
-
-		// notify clients of changed order
-		notifyClientsOfChangedOrders();
-
-		// remove all fulfilled orders
-		removeFulfilledOrders();
-
-		// reset the set of changed orders
-		updatedOrders = new HashSet<>();
-
+		if((order.isSellOrder() || order.isBuyOrder() ) && Session.history.contains(order))
+			return true;
+		else 
+			return false;
+	}
+	
+	/**
+	 * Uma quantidade de ordem única
+	 * (compra ou ordem de venda) nunca 
+	 * pode ser inferior a 10 unidades 
+	 */
+	private boolean unitsMorethan10(Order order) throws Exception{
+		if(order.getNumberOfUnits() < 10 )
+			return true;
+		else 
+			return false;
 	}
 	
 	/**
