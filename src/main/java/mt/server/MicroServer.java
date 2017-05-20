@@ -113,10 +113,11 @@ public class MicroServer implements MicroTraderServer {
 						}
 						if(unitsMoreThan10(msg.getOrder()))
 							throw new ServerException("The quantity of the order must be greater than 10 units");
-							maxSellOrders(msg.getOrder());
-							msg.getOrder().setServerOrderID(id++);
-							notifyAllClients(msg.getOrder());
-							processNewOrder(msg);
+						if(maxSellOrders(msg.getOrder()))
+							throw new ServerException("You can't have more than 5 unfilled orders");
+						msg.getOrder().setServerOrderID(id++);
+						notifyAllClients(msg.getOrder());
+						processNewOrder(msg);
 					} catch (ServerException e) {
 						serverComm.sendError(msg.getSenderNickname(), e.getMessage());
 					}
@@ -392,17 +393,17 @@ public class MicroServer implements MicroTraderServer {
 	 * 
 	 * @param order 		Order received by the application input
 	**/
-	private void maxSellOrders(Order o) throws ServerException {
+	private boolean maxSellOrders(Order o) throws ServerException {
 			int i= 0;
 			Set<Order> orders = orderMap.get(o.getNickname());
 			for (Iterator<Order> it = orders.iterator(); it.hasNext(); ) {
 				Order order = it.next();
 				if(order.isSellOrder())
-				i++;
-		
+					i++;
 			}
 			if(i == 5)
-				throw new ServerException("You can't have more than 5 unfilled orders");
+				return true;
+			return false;
 				
 		}
 	

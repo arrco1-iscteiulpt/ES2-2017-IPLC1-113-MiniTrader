@@ -252,8 +252,10 @@ class ClientCommThread extends Thread {
 					System.out.println(String.format("ClientComm >> Client '%s' is processing %s", nickname, message));
 					clientMessages.put(message);
 					if(Type.ERROR.equals(message.getType())){
-						System.out.println(String.format("ClientComm >> Client '%s' was not allowed to connect", nickname, message));
-						isConnected = false;
+						if(!message.getError().equals("You can't have more than 5 unfilled orders") && !message.getError().equals("The quantity of the order must be greater than 10 units")){
+							System.out.println(String.format("ClientComm >> Client '%s' was not allowed to connect", nickname, message));
+							isConnected = false;
+						}
 					}
 				} catch (EOFException | SocketException e) {
 					System.out.println(String.format("ClientComm >> The socket for client '%s' has been closed by sever", nickname));
