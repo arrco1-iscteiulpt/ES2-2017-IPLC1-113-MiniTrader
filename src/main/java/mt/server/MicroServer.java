@@ -383,8 +383,6 @@ public class MicroServer implements MicroTraderServer {
 	 * @param order 		Order received by the application input
 	**/
 	private void maxSellOrders(Order o) throws ServerException {
-		// TODO Auto-generated method stub
-		
 			int i= 0;
 			Set<Order> orders = orderMap.get(o.getNickname());
 			for (Iterator<Order> it = orders.iterator(); it.hasNext(); ) {
