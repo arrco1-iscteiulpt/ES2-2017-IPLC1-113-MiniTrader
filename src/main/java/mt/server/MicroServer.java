@@ -228,6 +228,7 @@ public class MicroServer implements MicroTraderServer {
 		saveOrder(o);
 		
 		
+		
 		// if is buy order
 		if (o.isBuyOrder()) {
 			processBuy(msg.getOrder());
