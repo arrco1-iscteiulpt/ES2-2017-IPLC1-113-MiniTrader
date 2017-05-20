@@ -1,5 +1,6 @@
 package mt.server;
 
+import java.awt.font.NumericShaper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,6 +30,9 @@ import mt.filter.AnalyticsFilter;
  */
 
 public class MicroServer implements MicroTraderServer {
+	
+	int numberOfUnits;
+	int numberOfOrders;
 	
 	public static void main(String[] args) {
 		ServerComm serverComm = new AnalyticsFilter(new ServerCommImpl());
@@ -295,6 +299,7 @@ public class MicroServer implements MicroTraderServer {
 	 * 			the order to be processed
 	 */
 	private boolean unitsMoreThan10(Order order){
+		numberOfUnits = order.getNumberOfUnits();
 		if(order.getNumberOfUnits() < 10 )
 			return true;
 		else 
@@ -424,7 +429,10 @@ public class MicroServer implements MicroTraderServer {
 		}
 	}
 	private void maxSellOrders(Order o) throws ServerException{
+		
 		int i= 0;
+		numberOfOrders = i;
+		
 		/*
 		 * Este metodo vai percorrer todas as ordens do tipo sell do user e lan�a
 		 * uma mensagem se atingir o numero de 5 ordens de venda
