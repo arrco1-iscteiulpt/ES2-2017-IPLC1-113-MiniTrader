@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import mt.Order;
-import mt.client.Session;
 import mt.comm.ServerComm;
 import mt.comm.ServerSideMessage;
 import mt.comm.impl.ServerCommImpl;
@@ -25,7 +24,7 @@ import mt.filter.AnalyticsFilter;
  * MicroTraderServer implementation. This class should be responsible
  * to do the business logic of stock transactions between buyers and sellers.
  * 
- * @author Group 78
+ * @author Group 113
  *
  */
 //test commit
@@ -71,10 +70,7 @@ public class MicroServer implements MicroTraderServer {
 		updatedOrders = new HashSet<>();
 	}
 
-	/**
-	 * 
-	 */
-	
+		
 	@Override
 	public void start(ServerComm serverComm) {
 		serverComm.start();
@@ -234,6 +230,7 @@ public class MicroServer implements MicroTraderServer {
 		LOGGER.log(Level.INFO, "Processing new order...");
 
 		Order o = msg.getOrder();
+		
 		try {
 				// save the order on map
 				saveOrder(o);
@@ -264,19 +261,14 @@ public class MicroServer implements MicroTraderServer {
 	}
 	
 	/**
-	 *  Os clientes nï¿½o estï¿½o autorizados a
-	 *   emitir ordens de venda para as 
-	 *   suas prï¿½prias ordens de compra e vice-versa. 
+	 * This method verify if the user
+	 * 
+	 * has the same order for a purchase or the same order for a sale
+	 * 
+	 * @param o
+	 * 	
 	 */
 	private boolean sameSellerOrBuyeOrder(Order o) throws Exception{
-		/*
-		 * Este metodo pecorre todas as ordens, verificando se o user 
-		 *  tem a mesma ordem para uma compra ou a mesma ordem para uma venda, 
-		 *  verificando se os nomes são iguais, 
-		 * 
-		 * 
-		 * 
-		 */
 		Set<Order> orders = orderMap.get(o.getNickname());
 		for (Iterator<Order> it = orders.iterator(); it.hasNext(); ) {
 			Order order = it.next();
@@ -296,9 +288,10 @@ public class MicroServer implements MicroTraderServer {
 	}
 	
 	/**
-	 * Uma quantidade de ordem ï¿½nica
-	 * (compra ou ordem de venda) nunca 
-	 * pode ser inferior a 10 unidades 
+	 * Throw exception if the number os untis aren't more than 10
+	 * 
+	 * @param o
+	 * 			the order to be processed
 	 */
 	private boolean unitsMoreThan10(Order order) throws Exception{
 		if(order.getNumberOfUnits() < 10 )
