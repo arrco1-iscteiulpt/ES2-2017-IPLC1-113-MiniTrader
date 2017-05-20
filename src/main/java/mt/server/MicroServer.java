@@ -272,12 +272,12 @@ public class MicroServer implements MicroTraderServer {
 	}
 	
 	/**
-	 * Throw exception if the number os untis aren't more than 10
+	 * Checks if the number of untis aren't more than 10
 	 * 
 	 * @param o
 	 * 			the order to be processed
 	 */
-	private boolean unitsMoreThan10(Order order) throws Exception{
+	private boolean unitsMoreThan10(Order order){
 		if(order.getNumberOfUnits() < 10 )
 			return true;
 		else 
