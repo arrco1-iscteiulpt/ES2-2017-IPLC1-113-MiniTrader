@@ -25,7 +25,7 @@ import mt.filter.AnalyticsFilter;
  * MicroTraderServer implementation. This class should be responsible
  * to do the business logic of stock transactions between buyers and sellers.
  * 
- * @author Group 78
+ * @author Group 113
  *
  */
 //test commit
@@ -105,11 +105,16 @@ public class MicroServer implements MicroTraderServer {
 						if(msg.getOrder().getServerOrderID() == EMPTY){
 							msg.getOrder().setServerOrderID(id++);
 						}
+						if(unitsMoreThan10(msg.getOrder()))
+							throw new ServerException("The quantity of the order must be greater than 10 units");
 						maxSellOrders(msg.getOrder());
 						notifyAllClients(msg.getOrder());
 						processNewOrder(msg);
 					} catch (ServerException e) {
 						serverComm.sendError(msg.getSenderNickname(), e.getMessage());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 					break;
 				default:
@@ -254,9 +259,10 @@ public class MicroServer implements MicroTraderServer {
 	}
 	
 	/**
-	 *  Os clientes não estão autorizados a
-	 *   emitir ordens de venda para as 
-	 *   suas próprias ordens de compra e vice-versa. 
+	 * Store the order on map
+	 * 
+	 * @param o
+	 * 			the order to be stored on map
 	 */
 	private boolean sameSellerOrBuyeOrder(Order order) throws Exception{
 		System.out.println(Session.orders.size()+"1");
@@ -267,9 +273,10 @@ public class MicroServer implements MicroTraderServer {
 	}
 	
 	/**
-	 * Uma quantidade de ordem única
-	 * (compra ou ordem de venda) nunca 
-	 * pode ser inferior a 10 unidades 
+	 * Throw exception if the number os untis aren't more than 10
+	 * 
+	 * @param o
+	 * 			the order to be processed
 	 */
 	private boolean unitsMoreThan10(Order order) throws Exception{
 		if(order.getNumberOfUnits() < 10 )
@@ -403,7 +410,7 @@ public class MicroServer implements MicroTraderServer {
 	private void maxSellOrders(Order o) throws ServerException{
 		int i= 0;
 		/*
-		 * Este metodo vai percorrer todas as ordens do tipo sell do user e lança
+		 * Este metodo vai percorrer todas as ordens do tipo sell do user e lanï¿½a
 		 * uma mensagem se atingir o numero de 5 ordens de venda
 		 */
 		Set<Order> orders = orderMap.get(o.getNickname());
