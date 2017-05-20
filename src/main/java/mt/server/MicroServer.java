@@ -103,10 +103,12 @@ public class MicroServer implements MicroTraderServer {
 					try {
 						verifyUserConnected(msg);
 						if(msg.getOrder().getServerOrderID() == EMPTY){
+							maxSellOrders(msg.getOrder());
 							msg.getOrder().setServerOrderID(id++);
+							notifyAllClients(msg.getOrder());
+							processNewOrder(msg);
 						}
-						notifyAllClients(msg.getOrder());
-						processNewOrder(msg);
+						
 					} catch (ServerException e) {
 						serverComm.sendError(msg.getSenderNickname(), e.getMessage());
 					}
@@ -117,6 +119,10 @@ public class MicroServer implements MicroTraderServer {
 		}
 		LOGGER.log(Level.INFO, "Shutting Down Server...");
 	}
+
+
+	
+
 
 
 	/**
@@ -373,5 +379,24 @@ public class MicroServer implements MicroTraderServer {
 			}
 		}
 	}
-
+	private void maxSellOrders(Order o) throws ServerException {
+		// TODO Auto-generated method stub
+		
+			int i= 0;
+			/*
+			 * Este metodo vai percorrer todas as ordens do tipo sell do user e lança
+			 * uma mensagem se atingir o numero de 5 ordens de venda
+			 */
+			Set<Order> orders = orderMap.get(o.getNickname());
+			for (Iterator<Order> it = orders.iterator(); it.hasNext(); ) {
+				Order order = it.next();
+				if(order.isSellOrder())
+				i++;
+		
+			}
+			if(i == 5)
+				throw new ServerException("You can't have more than 5 unfilled orders");
+				
+		}
+		
 }
