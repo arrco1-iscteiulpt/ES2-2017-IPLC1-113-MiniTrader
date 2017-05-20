@@ -32,7 +32,6 @@ import mt.filter.AnalyticsFilter;
  * @author Group 113
  *
  */
-//test commit
 public class MicroServer implements MicroTraderServer {
 	
 	private static XMLPersistance perssistance = new XMLPersistance();
