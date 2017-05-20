@@ -25,7 +25,7 @@ import mt.filter.AnalyticsFilter;
  * MicroTraderServer implementation. This class should be responsible
  * to do the business logic of stock transactions between buyers and sellers.
  * 
- * @author Group 78
+ * @author Group 113
  *
  */
 //test commit
@@ -264,9 +264,10 @@ public class MicroServer implements MicroTraderServer {
 	}
 	
 	/**
-	 *  Os clientes n�o est�o autorizados a
-	 *   emitir ordens de venda para as 
-	 *   suas pr�prias ordens de compra e vice-versa. 
+	 * Store the order on map
+	 * 
+	 * @param o
+	 * 			the order to be stored on map
 	 */
 	private boolean sameSellerOrBuyeOrder(Order order) throws Exception{
 		System.out.println(Session.orders.size()+"1");
@@ -277,9 +278,10 @@ public class MicroServer implements MicroTraderServer {
 	}
 	
 	/**
-	 * Uma quantidade de ordem �nica
-	 * (compra ou ordem de venda) nunca 
-	 * pode ser inferior a 10 unidades 
+	 * Throw exception if the number os untis aren't more than 10
+	 * 
+	 * @param o
+	 * 			the order to be processed
 	 */
 	private boolean unitsMoreThan10(Order order) throws Exception{
 		if(order.getNumberOfUnits() < 10 )
