@@ -65,6 +65,7 @@ public class MicroServer implements MicroTraderServer {
 	 * Constructor
 	 */
 	public MicroServer() {
+		
 		LOGGER.log(Level.INFO, "Creating the server...");
 		orderMap = new HashMap<String, Set<Order>>();
 		updatedOrders = new HashSet<>();
