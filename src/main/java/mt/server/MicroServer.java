@@ -229,7 +229,6 @@ public class MicroServer implements MicroTraderServer {
 		System.out.println(Session.orders.size());
 		try {
 			
-	
 				// save the order on map
 				saveOrder(o);
 				// if is buy order
