@@ -103,9 +103,13 @@ public class MicroServer implements MicroTraderServer {
 						verifyUserConnected(msg);
 						if(msg.getOrder().getServerOrderID() == EMPTY){
 							msg.getOrder().setServerOrderID(id++);
-						}
-						notifyAllClients(msg.getOrder());
-						processNewOrder(msg);
+						}	
+							if(unitsMoreThan10(msg.getOrder()))
+								throw new ServerException("The quantity of the order must be greater than 10 units");
+							msg.getOrder().setServerOrderID(id++);
+							notifyAllClients(msg.getOrder());
+							processNewOrder(msg);	
+							
 					} catch (ServerException e) {
 						serverComm.sendError(msg.getSenderNickname(), e.getMessage());
 					}
@@ -366,6 +370,16 @@ public class MicroServer implements MicroTraderServer {
 				}
 			}
 		}
+	}
+	
+	private boolean unitsMoreThan10(Order order) throws ServerException{
+		
+		if(order.getNumberOfUnits() < 10 ){
+		
+			return true;
+		}
+		
+		return false;
 	}
 
 }
