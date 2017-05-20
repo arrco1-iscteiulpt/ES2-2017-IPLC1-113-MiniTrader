@@ -1,5 +1,6 @@
 package mt.server;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +13,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import mt.Order;
 import mt.comm.ServerComm;
@@ -29,6 +34,8 @@ import mt.filter.AnalyticsFilter;
  */
 //test commit
 public class MicroServer implements MicroTraderServer {
+	
+	private static XMLPerssistance perssistance = new XMLPerssistance();
 	
 	public static void main(String[] args) {
 		ServerComm serverComm = new AnalyticsFilter(new ServerCommImpl());
@@ -226,7 +233,11 @@ public class MicroServer implements MicroTraderServer {
 		
 		// save the order on map
 		saveOrder(o);
-		
+		try {
+			perssistance.saveOrderToXML(o);
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+		}
 		
 		
 		// if is buy order
