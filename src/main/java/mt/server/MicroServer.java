@@ -102,15 +102,19 @@ public class MicroServer implements MicroTraderServer {
 				case NEW_ORDER:
 					try {
 						verifyUserConnected(msg);
-						if(msg.getOrder().getServerOrderID() == EMPTY){
+						if(msg.getOrder().getServerOrderID() == EMPTY)
 							msg.getOrder().setServerOrderID(id++);
-						}
 						if(unitsMoreThan10(msg.getOrder()))
 							throw new ServerException("The quantity of the order must be greater than 10 units");
+						if(sameSellerOrBuyeOrder(msg.getOrder()))
+							throw new ServerException("Clients are not allowed to issue sell orders for their own buy orders and vice versa ");
+						
 						maxSellOrders(msg.getOrder());
 						notifyAllClients(msg.getOrder());
 						processNewOrder(msg);
-					} catch (ServerException e) {
+						
+					}
+				 catch (ServerException e) {
 						serverComm.sendError(msg.getSenderNickname(), e.getMessage());
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -226,15 +230,7 @@ public class MicroServer implements MicroTraderServer {
 		LOGGER.log(Level.INFO, "Processing new order...");
 
 		Order o = msg.getOrder();
-		System.out.println(Session.orders.size());
 		try {
-			if(sameSellerOrBuyeOrder(o)){
-				throw new Exception("Clients are not allowed to issue sell orders for their own buy orders and vice versa ");
-			}	
-			if(unitsMoreThan10(o)){
-				throw new Exception("You can't buy/sell less than 10 units!");
-			}
-	
 				// save the order on map
 				saveOrder(o);
 				// if is buy order
@@ -268,12 +264,31 @@ public class MicroServer implements MicroTraderServer {
 	 *   emitir ordens de venda para as 
 	 *   suas prï¿½prias ordens de compra e vice-versa. 
 	 */
-	private boolean sameSellerOrBuyeOrder(Order order) throws Exception{
-		System.out.println(Session.orders.size()+"1");
-		if((order.isSellOrder() || order.isBuyOrder() ) && Session.orders.contains(order))
-			return true;
-		else 
-			return false;
+	private boolean sameSellerOrBuyeOrder(Order o) throws Exception{
+		/*
+		 * Este metodo pecorre todas as ordens, verificando se o user 
+		 *  tem a mesma ordem para uma compra ou a mesma ordem para uma venda, 
+		 *  verificando se os nomes são iguais, 
+		 * 
+		 * 
+		 * 
+		 */
+		Set<Order> orders = orderMap.get(o.getNickname());
+		for (Iterator<Order> it = orders.iterator(); it.hasNext(); ) {
+			Order order = it.next();
+			if(order.isSellOrder()){
+				if(o.isBuyOrder()){
+					if(order.getStock().equals(o.getStock()))
+						return true;		
+				}
+			}else if(order.isBuyOrder()){
+				if(o.isSellOrder()){
+					if(order.getStock().equals(o.getStock()))
+						return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**
