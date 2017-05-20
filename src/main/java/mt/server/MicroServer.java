@@ -223,12 +223,7 @@ public class MicroServer implements MicroTraderServer {
 		Order o = msg.getOrder();
 		System.out.println(Session.orders.size());
 		try {
-			if(sameSellerOrBuyeOrder(o)){
-				throw new Exception("Clients are not allowed to issue sell orders for their own buy orders and vice versa ");
-			}	
-			if(unitsMoreThan10(o)){
-				throw new Exception("You can't buy/sell less than 10 units!");
-			}
+			
 	
 				// save the order on map
 				saveOrder(o);
