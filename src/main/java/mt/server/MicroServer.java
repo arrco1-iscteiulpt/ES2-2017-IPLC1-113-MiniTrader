@@ -102,12 +102,14 @@ public class MicroServer implements MicroTraderServer {
 					try {
 						verifyUserConnected(msg);
 						if(msg.getOrder().getServerOrderID() == EMPTY){
+							msg.getOrder().setServerOrderID(id++);
+						}	
 							if(unitsMoreThan10(msg.getOrder()))
 								throw new ServerException("The quantity of the order must be greater than 10 units");
-								msg.getOrder().setServerOrderID(id++);
-								notifyAllClients(msg.getOrder());
-								processNewOrder(msg);	
-						}		
+							msg.getOrder().setServerOrderID(id++);
+							notifyAllClients(msg.getOrder());
+							processNewOrder(msg);	
+							
 					} catch (ServerException e) {
 						serverComm.sendError(msg.getSenderNickname(), e.getMessage());
 					}
@@ -225,12 +227,8 @@ public class MicroServer implements MicroTraderServer {
 		// save the order on map
 		saveOrder(o);
 		
-		// BR3 - A single order quantity (buy or sell order) 
-		// can never be lower than 10 units 
-		if(o.getNumberOfUnits() < 10){
-			throw new ServerException("You can't buy/sell less than 10 units!");
-		}
-
+		
+		
 		// if is buy order
 		if (o.isBuyOrder()) {
 			processBuy(msg.getOrder());
