@@ -31,6 +31,8 @@ public class XMLPersistance {
 
 	private final String fileName = "OrderPresistance.xml";
 	
+	public XMLPersistance(){};
+	
 	/**
 	 * This method writes/appends an order to the xml file.
 	 * 
@@ -39,10 +41,10 @@ public class XMLPersistance {
 	 * @throws SAXException if the method can't parse the xml file
 	 * @throws IOException if the method can't write on xml file
 	 */
-	public void saveOrderToXML(Order order) throws ParserConfigurationException, SAXException, IOException{
-		File file = new File(fileName);
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	public void saveOrderToXML(final Order order) throws ParserConfigurationException, SAXException, IOException{
+		final File file = new File(fileName);
+		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document document = null;
 		Element root = null;
 		boolean fileExists = true;
@@ -55,13 +57,13 @@ public class XMLPersistance {
 			root = document.createElement("Orders");
 		}
 		
-		Element orderElement = storeOrderData(document, document.createElement("Order"), order);
+		final Element orderElement = storeOrderData(document, document.createElement("Order"), order);
 		
 		root.appendChild(orderElement);
 		
-		if(fileExists)
+		if(fileExists){
 			document.appendChild(root);
-		
+		}
 		try {
 			saveDataToXMLFile(document);
 		} catch (TransformerException e) {
