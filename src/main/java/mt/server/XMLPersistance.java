@@ -94,6 +94,12 @@ public class XMLPersistance {
 	 */
 	private Element storeOrderData(Document document, Element orderElement,Order order){
 		orderElement.setAttribute("ServerOrderID", ""+order.getServerOrderID());
+		Element operation = null;
+		if(order.isBuyOrder())
+			operation = document.createElement("buy");
+		else
+			operation = document.createElement("sell");
+		orderElement.appendChild(operation);
 		Element stock = document.createElement("stock");
 		stock.appendChild(document.createTextNode(order.getStock()));
 		orderElement.appendChild(stock);
