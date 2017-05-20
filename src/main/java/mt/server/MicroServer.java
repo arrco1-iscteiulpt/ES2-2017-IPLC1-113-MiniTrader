@@ -71,6 +71,10 @@ public class MicroServer implements MicroTraderServer {
 		updatedOrders = new HashSet<>();
 	}
 
+	/**
+	 * 
+	 */
+	
 	@Override
 	public void start(ServerComm serverComm) {
 		serverComm.start();
