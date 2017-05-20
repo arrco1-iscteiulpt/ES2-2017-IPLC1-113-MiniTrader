@@ -35,7 +35,7 @@ import mt.filter.AnalyticsFilter;
 //test commit
 public class MicroServer implements MicroTraderServer {
 	
-	private static XMLPerssistance perssistance = new XMLPerssistance();
+	private static XMLPersistance perssistance = new XMLPersistance();
 	
 	public static void main(String[] args) {
 		ServerComm serverComm = new AnalyticsFilter(new ServerCommImpl());
