@@ -112,7 +112,7 @@ public class MicroServer implements MicroTraderServer {
 						if(unitsMoreThan10(msg.getOrder()))
 							throw new ServerException("The quantity of the order must be greater than 10 units");
 						if(sameSellerOrBuyeOrder(msg.getOrder()))
-							throw new ServerException("Clients are not allowed to issue sell orders for their own buy orders and vice versa ");
+							throw new ServerException("Clients are not allowed to issue sell orders for their own buy orders and vice versa");
 						
 						maxSellOrders(msg.getOrder());
 						notifyAllClients(msg.getOrder());
