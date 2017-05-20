@@ -104,6 +104,7 @@ public class XMLPersistance {
 			operation = document.createElement("buy");
 		else
 			operation = document.createElement("sell");
+		orderElement.appendChild(operation);
 		Element stock = document.createElement("stock");
 		stock.appendChild(document.createTextNode(order.getStock()));
 		orderElement.appendChild(stock);
