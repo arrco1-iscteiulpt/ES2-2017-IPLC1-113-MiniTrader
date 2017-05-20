@@ -28,7 +28,7 @@ import mt.filter.AnalyticsFilter;
  * @author Group 113
  *
  */
-
+//tt
 public class MicroServer implements MicroTraderServer {
 	
 	int numberOfUnits;
@@ -428,6 +428,11 @@ public class MicroServer implements MicroTraderServer {
 			}
 		}
 	}
+	/**
+	 * Iterates through user's orders until it reaches 5 orders 
+	 * 
+	 * @param order 		Order received by the application input
+	**/
 	private void maxSellOrders(Order o) throws ServerException{
 		
 		int i= 0;
