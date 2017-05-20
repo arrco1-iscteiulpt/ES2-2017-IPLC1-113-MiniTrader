@@ -377,14 +377,15 @@ public class MicroServer implements MicroTraderServer {
 			}
 		}
 	}
+	/**
+	 * Iterates through user's orders until it reaches 5 orders 
+	 * 
+	 * @param order 		Order received by the application input
+	**/
 	private void maxSellOrders(Order o) throws ServerException {
 		// TODO Auto-generated method stub
 		
 			int i= 0;
-			/*
-			 * Este metodo vai percorrer todas as ordens do tipo sell do user e lan�a
-			 * uma mensagem se atingir o numero de 5 ordens de venda
-			 */
 			Set<Order> orders = orderMap.get(o.getNickname());
 			for (Iterator<Order> it = orders.iterator(); it.hasNext(); ) {
 				Order order = it.next();
