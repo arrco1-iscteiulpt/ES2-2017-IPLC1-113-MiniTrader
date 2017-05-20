@@ -110,11 +110,11 @@ public class MicroServer implements MicroTraderServer {
 						if(msg.getOrder().getServerOrderID() == EMPTY)
 							msg.getOrder().setServerOrderID(id++);
 						if(unitsMoreThan10(msg.getOrder()))
-							serverComm.sendError(msg.getSenderNickname(), "The quantity of the order must be greater than 10 units");
+							throw new ServerException("The quantity of the order must be greater than 10 units");
 						if(sameSellerOrBuyeOrder(msg.getOrder()))
-							serverComm.sendError(msg.getSenderNickname(), "Clients are not allowed to issue sell orders for their own buy orders and vice versa");
+							throw new ServerException("Clients are not allowed to issue sell orders for their own buy orders and vice versa");
 						if(maxSellOrders(msg.getOrder()))
-							serverComm.sendError(msg.getSenderNickname(), "You can't have more than 5 unfilled orders");
+							throw new ServerException("You can't have more than 5 unfilled orders");
 						notifyAllClients(msg.getOrder());
 						processNewOrder(msg);
 						
