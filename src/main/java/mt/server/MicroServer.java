@@ -103,14 +103,14 @@ public class MicroServer implements MicroTraderServer {
 					try {
 						verifyUserConnected(msg);
 						if(msg.getOrder().getServerOrderID() == EMPTY){
-							if(unitsMoreThan10(msg.getOrder()))
-								throw new ServerException("The quantity of the order must be greater than 10 units");
+							msg.getOrder().setServerOrderID(id++);
+						}
+						if(unitsMoreThan10(msg.getOrder()))
+							throw new ServerException("The quantity of the order must be greater than 10 units");
 							maxSellOrders(msg.getOrder());
 							msg.getOrder().setServerOrderID(id++);
 							notifyAllClients(msg.getOrder());
 							processNewOrder(msg);
-						}
-						
 					} catch (ServerException e) {
 						serverComm.sendError(msg.getSenderNickname(), e.getMessage());
 					}
