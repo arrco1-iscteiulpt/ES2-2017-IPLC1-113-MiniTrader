@@ -28,15 +28,16 @@ import mt.filter.AnalyticsFilter;
  * @author Group 113
  *
  */
-//tt
 public class MicroServer implements MicroTraderServer {
 	
 	int numberOfUnits;
 	int numberOfOrders;
+	static XMLPersistance xmlPersistance;
 	
 	public static void main(String[] args) {
 		ServerComm serverComm = new AnalyticsFilter(new ServerCommImpl());
 		MicroTraderServer server = new MicroServer();
+		xmlPersistance = new XMLPersistance();
 		server.start(serverComm);
 	}
 
