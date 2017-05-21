@@ -99,11 +99,11 @@ public class XMLPersistance {
 		Element nickname = document.createElement("nickname");
 		nickname.appendChild(document.createTextNode(order.getNickname()));
 		orderElement.appendChild(nickname);
-		Element operation = null;
+		Element operation = document.createElement("operation");
 		if(order.isBuyOrder())
-			operation = document.createElement("buy");
+			operation.appendChild(document.createTextNode("buy"));
 		else
-			operation = document.createElement("sell");
+			operation.appendChild(document.createTextNode("sell"));
 		orderElement.appendChild(operation);
 		Element stock = document.createElement("stock");
 		stock.appendChild(document.createTextNode(order.getStock()));
