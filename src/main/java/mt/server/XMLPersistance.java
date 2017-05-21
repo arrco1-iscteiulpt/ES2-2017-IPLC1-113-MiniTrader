@@ -109,9 +109,6 @@ public class XMLPersistance {
 		Element priceUnits = document.createElement("pricePerUnits");
 		priceUnits.appendChild(document.createTextNode(""+order.getPricePerUnit()));
 		orderElement.appendChild(priceUnits);
-		Element isBuyOrder = document.createElement("isBuyOrder");
-		isBuyOrder.appendChild(document.createTextNode(""+order.isBuyOrder()));
-		orderElement.appendChild(isBuyOrder);
 		return orderElement;
 	}
 	
